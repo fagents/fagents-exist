@@ -1,0 +1,9 @@
+.env
+.awareness/inbox/*.jsonl
+.awareness/archive/*.jsonl
+.awareness/state/*
+.awareness/awareness.pid
+.awareness/watcher.pid
+.introspection
+.awareness/stop
+.claude/settings.local.json
