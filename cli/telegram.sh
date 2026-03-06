@@ -33,10 +33,13 @@ while [[ "${1:-}" == --* ]]; do
     esac
 done
 
-# Resolve credentials
-CALLER="${SUDO_USER:-}"
+# Resolve credentials: --token flag > TELEGRAM_BOT_TOKEN env var > sudo cred file
 if [[ -z "$TOKEN" ]]; then
-    [[ -z "$CALLER" ]] && err "Must be called via sudo -u fagents (or use --token)"
+    TOKEN="${TELEGRAM_BOT_TOKEN:-}"
+fi
+if [[ -z "$TOKEN" ]]; then
+    CALLER="${SUDO_USER:-}"
+    [[ -z "$CALLER" ]] && err "No token (set TELEGRAM_BOT_TOKEN, use --token, or call via sudo -u fagents)"
     CRED_FILE="$CREDS_DIR/$CALLER/telegram.env"
     [[ -f "$CRED_FILE" ]] || err "No credentials for $CALLER"
     source "$CRED_FILE"
