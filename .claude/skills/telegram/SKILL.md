@@ -1,13 +1,13 @@
 ---
 name: telegram
-description: Send and receive Telegram messages via Bot API.
-argument-hint: "[send|poll|whoami] [args...]"
-allowed-tools: Bash(bash */telegram.sh *)
+description: Send and receive Telegram messages (text + voice) via Bot API.
+argument-hint: "[send|sendVoice|poll|whoami] [args...]"
+allowed-tools: Bash(bash */telegram.sh *),Bash(bash */tts-speak.sh *),Bash(bash */stt-transcribe.sh *)
 ---
 
 # Telegram
 
-Send and receive Telegram DMs via the Bot API. Messages are 1:1 between a Telegram user and your bot.
+Send and receive Telegram DMs via the Bot API. Supports text and voice messages.
 
 The CLI is at `./cli/telegram.sh`. Requires `TELEGRAM_BOT_TOKEN` in `.env` (or use `--token`).
 
@@ -20,16 +20,39 @@ bash ./cli/telegram.sh whoami
 ```
 
 ### send
-Send a message to a chat.
+Send a text message to a chat.
 ```bash
 bash ./cli/telegram.sh send <chat-id> "message text"
 ```
 
+### sendVoice
+Send an OGG/Opus audio file as a voice message.
+```bash
+bash ./cli/telegram.sh sendVoice <chat-id> <voice-file.ogg>
+```
+
 ### poll
-Check for new DMs. Returns one JSON line per message.
+Check for new DMs. Returns one JSON line per message. Detects both text and voice messages.
 ```bash
 bash ./cli/telegram.sh poll
 ```
+
+Text: `{"update_id":123,"chat_id":456,"from":"username","text":"hello","date":1709600000,"type":"text"}`
+Voice: `{"update_id":124,"chat_id":456,"from":"username","text":null,"date":1709600001,"type":"voice","file_id":"...","duration":3}`
+
+## Voice
+
+### Text to speech
+```bash
+bash ./cli/tts-speak.sh <chat-id> "text to speak"
+```
+Requires `OPENAI_API_KEY` in `.env` (or use `--api-key`). Options: `--voice`, `--model`
+
+### Speech to text
+```bash
+bash ./cli/stt-transcribe.sh <file-id>
+```
+The `file_id` comes from poll output. Options: `--model`, `--language`
 
 ## Notes
 
