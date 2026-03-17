@@ -1,7 +1,7 @@
 #!/bin/bash
 # fagents-exist — stop hook
 # Always blocks exit. Injects .awareness/inbox/ messages if any,
-# otherwise a heartbeat. Touch .awareness/stop to actually stop.
+# otherwise a rembeat. Touch .awareness/stop to actually stop.
 
 set -euo pipefail
 
@@ -51,9 +51,9 @@ if [ "$COUNT" -gt 0 ]; then
 ${PROMPT}"
 fi
 
-# Heartbeat if empty
+# Rembeat if empty
 if [ "$COUNT" -eq 0 ]; then
-    PROMPT="Heartbeat. No new messages. Check comms or continue your work."
+    PROMPT="Rembeat. No new messages. Check comms or continue your work."
 fi
 
 jq -n --arg prompt "$PROMPT" --arg sys "$SYS" \
